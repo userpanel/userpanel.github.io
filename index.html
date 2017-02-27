@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>User Panel Sensor Data</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/3.19/dijit/themes/claro/claro.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/3.19/esri/css/esri.css">
+  <script src="https://js.arcgis.com/3.19/"></script>
+
+  <style>
+    html, 
+    body, 
+    #myTableNode {
+      width:100%;
+      height:90%;
+      margin:30;
+      padding:0;
+    }
+    
+    #top, 
+    #bot {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+
+  <script>
+    var map;
+
+    require([
+      "esri/layers/FeatureLayer",
+      "esri/dijit/FeatureTable",
+      "dojo/dom",
+      "dojo/parser",
+      "dojo/ready",
+    ], function (
+      FeatureLayer, FeatureTable,
+      dom, parser, ready
+    ) {
+
+      parser.parse();
+
+      ready(function(){
+
+        // Create the feature layer
+        var myFeatureLayer = new FeatureLayer("http://services.arcgis.com/Wl7Y1m92PbjtJs5n/arcgis/rest/services/Soil_Sensor_Data/FeatureServer/0", {
+          mode: FeatureLayer.MODE_ONDEMAND,
+          outFields:  ["pH","Moisture","Humidity"],
+          visible: true,
+          id: "fLayer"
+        });
+
+        myTable = new FeatureTable({
+          featureLayer : myFeatureLayer,
+          showGridMenu: true,
+		  fieldInfos: [
+  {
+    name: "pH",
+    alias: "pH",
+    visible: true,
+    format:{
+      embeddedHTML: true
+    }
+  }
+  
+ 
+  ]
+         
+        }, "myTableNode");
+
+        myTable.startup();
+      });
+    });
+  </script>
+</head>
+
+<body class="claro esri">
+  <div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'headline', gutters: false" style="width:100%; height:100%;">
+    <div id="top" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
+    <h1><center><u>Soil Sensor Data User Panel</u></center></h1>
+	
+    </div>
+    <div id="bot" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
+      <div id="myTableNode"></div>
+    </div>
+  </div>
+  
+ 
+</body>
+
+</html> 
